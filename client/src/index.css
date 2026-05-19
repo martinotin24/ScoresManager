@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Esto asegura que el fondo sea oscuro como en el diseño */
+body {
+  margin: 0;
+  background-color: #0f172a; /* Color slate-900 */
+  color: white;
+}
