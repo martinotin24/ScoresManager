@@ -1,10 +1,19 @@
-# Dependencias de Node
+# Dependencias
 node_modules/
-client/node_modules/
 
-# Archivos de entorno y secretos
+# Variables de entorno ¡CRÍTICO!
 .env
-ca-certificate.crt
+.env.*
 
-# Archivos subidos por usuarios
+# Archivos de build (si usas React compilado)
+dist/
+build/
+
+# Archivos y respaldos de Base de Datos
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+
 uploads/
+ca-certificate.crt

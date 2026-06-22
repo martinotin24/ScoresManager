@@ -63,7 +63,7 @@ const db = mysql.createPool({
     database: 'gig',
     port: 25060,
     ssl: {
-        ca: fs.readFileSync('/var/www/violin-app/ca-certificate.crt'),
+        ca: fs.readFileSync('./ca-certificate.crt'),
         rejectUnauthorized: true 
     },
     waitForConnections: true,
@@ -234,7 +234,16 @@ app.delete('/api/events/:eventId/songs/:songId', (req, res) => {
     });
 });
 
-// --- 8. LANZAMIENTO ---
+// --- 8. INTEGRACIÓN CON FRONTEND (CATCH-ALL) ---
+// 1. Dile a Node que exponga la carpeta donde Vite compiló tu frontend
+app.use(express.static(path.join(__dirname, 'client/dist')));
+
+// 2. Catch-All universal: Cualquier petición no manejada, envíala a React
+app.use((req, res) => {
+    res.sendFile(path.join(__dirname, 'client/dist', 'index.html'));
+});
+
+// --- 9. LANZAMIENTO ---
 const PORT = 3000;
 const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Backend Live en puerto ${PORT} con Pool y Resiliencia`);
