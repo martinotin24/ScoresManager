@@ -1,0 +1,19 @@
+name: Deploy and Notify
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  notify-digital-ocean:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Enviar Webhook a DigitalOcean Functions
+        run: |
+          curl -X POST https://faas-sfo3-7872a1dd.doserverless.co/api/v1/web/fn-f807d59b-1060-4215-aaad-7564826c7dbd/default/github-deploy-logger \
+          -H "Content-Type: application/json" \
+          -d '{"repository": {"name": "${{ github.repository }}"}, "event": "push"}'
