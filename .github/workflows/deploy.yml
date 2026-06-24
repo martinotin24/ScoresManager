@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  notify-digital-ocean:
+  notify-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -17,3 +17,20 @@ jobs:
           curl -X POST https://faas-sfo3-7872a1dd.doserverless.co/api/v1/web/fn-f807d59b-1060-4215-aaad-7564826c7dbd/default/github-deploy-logger \
           -H "Content-Type: application/json" \
           -d '{"repository": {"name": "${{ github.repository }}"}, "event": "push"}'
+
+      - name: Ejecutar comandos en el Droplet via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: ${{ secrets.DROPLET_USER }}
+          key: ${{ secrets.DROPLET_SSH_KEY }}
+          script: |
+            cd /var/www/Scores-Violin
+            git pull origin main
+            
+            # Borra la línea que NO uses dependiendo de cómo corras la app:
+            # OPCIÓN A (Si usas PM2): 
+            npm install --production && pm2 restart scores-manager || pm2 start server.js --name "scores-manager"
+            
+            # OPCIÓN B (Si usas Docker):
+            # docker-compose up -d --build
