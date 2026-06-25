@@ -19,6 +19,6 @@ jobs:
           username: ${{ secrets.DROPLET_USER }}
           key: ${{ secrets.DROPLET_SSH_KEY }}
           script: |
-            cd /var/www/Scores-Violin
+            cd /var/www/IEMI  # (O Scores-Violin, dependiendo de cuál estés editando)
             git pull origin main
-            docker-compose up -d --build
+            docker compose up -d --build
